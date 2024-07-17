@@ -4,7 +4,7 @@ from ..classes.diary import Diary
 
 
 class mongo:
-    uri = "mongodb+srv://alon1303:Alon1303@food-diary.39ybefu.mongodb.net/?retryWrites=true&w=majority&appName=food-diary&authSource=admin"
+    uri = "mongodb+srv://alon8070:hV9PHw0w6tmnICeE@cluster0.hh2b0ve.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     
     db_name = "food-diary"
     client = MongoClient(uri, server_api=ServerApi("1"))
@@ -16,10 +16,11 @@ class mongo:
             print("Init Mongo Error!: ")
             print(e)
 
-    def add_diary(self, diary):
+    def add_diary(self, diary:Diary):
         diary_collection = "diarys"
+        dict_diary = diary.model_dump()
         try:
-            self.client[self.db_name][diary_collection].insert_one(diary)
+            self.client[self.db_name][diary_collection].insert_one(dict_diary)
         except Exception as e:
             print("Add Diary Document Error!: ")
             print(e)

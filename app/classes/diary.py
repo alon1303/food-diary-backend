@@ -1,8 +1,10 @@
 from pydantic import BaseModel
-from .page import Page
-from typing import List
+from page import Page
+from datetime import date
+from datetype import Date
 class Diary(BaseModel):
     name: str
     format: str
-    pages: List[Page]
-    date: str
+    userName:str
+    pages:list[Page] = []
+    create_date: Date = date
