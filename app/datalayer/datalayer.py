@@ -25,11 +25,23 @@ class mongo:
         except Exception as e:
             print("Add Diary Document Error!: ")
             print(e)
-    def add_user(self, user:User):
+    # def add_user(self, user:User):
+    #     user_collection = "users"
+    #     dict_user = user.model_dump()
+    #     try:
+    #         self.client[self.db_name][user_collection].insert_one(dict_user)
+    #     except Exception as e:
+    #         print("Add User Document Error!: ")
+    #         print(e)
+    def get_all_users(self):
         user_collection = "users"
-        dict_user = user.model_dump()
         try:
-            self.client[self.db_name][user_collection].insert_one(dict_diary)
+            users = self.client[self.db_name][user_collection].find({},{"user_name":1, "_id":0})
+            print(users)
+            return users
         except Exception as e:
-            print("Add User Document Error!: ")
             print(e)
+        
+
+
+    
