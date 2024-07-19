@@ -1,6 +1,7 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from ..classes.diary import Diary
+from ..classes.classes import Diary, User
+
 
 
 class mongo:
@@ -23,4 +24,12 @@ class mongo:
             self.client[self.db_name][diary_collection].insert_one(dict_diary)
         except Exception as e:
             print("Add Diary Document Error!: ")
+            print(e)
+    def add_user(self, user:User):
+        user_collection = "users"
+        dict_user = user.model_dump()
+        try:
+            self.client[self.db_name][user_collection].insert_one(dict_diary)
+        except Exception as e:
+            print("Add User Document Error!: ")
             print(e)
