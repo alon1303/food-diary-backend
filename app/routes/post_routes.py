@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from ..classes.classes import Diary
+from ..classes.classes import Diary, User
 from ..datalayer.datalayer import mongo
 post_router = APIRouter()
 
@@ -11,9 +11,12 @@ def add_diary(diary: Diary):
         db.add_diary(diary)
     except Exception as e:
         print(e)
-# @post_router.post("/users/add-user")
-# def add_user(user):
-#     try:
+@post_router.post("/users/add-user")
+def add_user(user:User):
+    try:
+        db.add_user(user)
+    except Exception as e:
+        print(e)
         
         
         
