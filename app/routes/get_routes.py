@@ -14,8 +14,16 @@ def get_all_users():
         print(e)
     
 @get_router.get('/users/check-username/{username}')
-def check_username(user_name:str):
-    try:        
-        return db.check_username(user_name)
+def check_username(username:str):
+    try:
+               
+        return db.check_username(username)
+    except Exception as e:
+        print(e)
+    
+@get_router.get('/users/login')
+def login(user_name:str, password:str):
+    try:               
+        return db.login(user_name, password)
     except Exception as e:
         print(e)
