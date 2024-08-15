@@ -2,6 +2,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from ..classes.classes import Diary, User
 import re
+from bson import ObjectId
 
 
 class mongo:
@@ -29,10 +30,10 @@ class mongo:
             print(e)
 
     def check_username(self, user_name: str):
-        
+
         user_collection = self.db["users"]
         try:
-            user =user_collection.find_one(
+            user = user_collection.find_one(
                 {"user_name": user_name}, {"_id": 0, "password": 0}
             )
             return user is not None
@@ -41,7 +42,7 @@ class mongo:
             print(e)
 
     def add_user(self, user: User):
-        
+
         user_collection = self.db["users"]
         dict_user = user.model_dump()
         try:
@@ -59,13 +60,24 @@ class mongo:
             return users
         except Exception as e:
             print(e)
-    
-    def login(self, user_name:str, password:str):
-        user_collection = self.db["users"]        
+
+    def login(self, user_name: str, password: str):
+        user_collection = self.db["users"]
         try:
             user_fetch = user_collection.find_one(
-                {"user_name": user_name, "password":password}, {"_id": 0}
+                {"user_name": user_name, "password": password}, {"_id": 0}
             )
             return user_fetch is not None
+        except Exception as e:
+            print(e)
+    def get_user_id(self, username:str):
+        user_collection = self.db["users"]
+        try:
+            user_fetch = user_collection.find_one(
+                {"user_name":username}, {"user_name":0, "password":0}
+            )
+            user_id = str(user_fetch['_id'])
+            return user_id
+            
         except Exception as e:
             print(e)

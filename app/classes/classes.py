@@ -1,19 +1,22 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
+from bson import ObjectId
+
 
 class Page(BaseModel):
-    name:str
-    content:str
-    date:str
+    name: str
+    content: str
+    diary_id: str
+    date: str
+
 
 class Diary(BaseModel):
     name: str
     format: str
-    userName:str
-    pages:list[Page] = []
+    user_id: str
     create_date: datetime = datetime.today()
 
-class User(BaseModel):
-    user_name:str
-    password:str
 
+class User(BaseModel):
+    username: str
+    password: str
