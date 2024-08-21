@@ -34,3 +34,15 @@ def get_user_id(username:str):
         return db.get_user_id()
     except Exception as e:
         print(e)
+@get_router.get('/diarys/get-diarys-by-user-id')
+def get_diarys_by_user_id(user_id:str):
+    try:
+        return db.get_diarys_by_user_id(user_id)
+    except Exception as e:
+        print(e)
+@get_router.get('/pages/get-pages-by-diary-id')
+def get_pages_by_diary_id(diary_id:str):
+    try:
+        return db.get_pages_by_diary_id(diary_id)
+    except Exception as e:
+        print(e)

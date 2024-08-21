@@ -1,6 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from ..classes.classes import Diary, User
+from ..classes.classes import Diary, User, Page
 import re
 from bson import ObjectId
 
@@ -20,14 +20,9 @@ class mongo:
             print("Init Mongo Error!: ")
             print(e)
 
-    def add_diary(self, diary: Diary):
-        diary_collection = self.db["diarys"]
-        dict_diary = diary.model_dump()
-        try:
-            diary_collection.insert_one(dict_diary)
-        except Exception as e:
-            print("Add Diary Document Error!: ")
-            print(e)
+    ######################################
+    # Should Be Put!!!!!!!!!!!!!!!!!!!!!!!
+    ######################################
 
     def check_username(self, user_name: str):
 
@@ -41,26 +36,6 @@ class mongo:
             print("Is Username Valid Error!: ")
             print(e)
 
-    def add_user(self, user: User):
-
-        user_collection = self.db["users"]
-        dict_user = user.model_dump()
-        try:
-            user_collection.insert_one(dict_user)
-
-        except Exception as e:
-            print("Add User Document Error!: ")
-            print(e)
-
-    def get_all_users(self):
-        user_collection = self.db["users"]
-        try:
-            users = list(user_collection.find({}, {"user_name": 1, "_id": 0}))
-            print(users)
-            return users
-        except Exception as e:
-            print(e)
-
     def login(self, user_name: str, password: str):
         user_collection = self.db["users"]
         try:
@@ -70,14 +45,72 @@ class mongo:
             return user_fetch is not None
         except Exception as e:
             print(e)
-    def get_user_id(self, username:str):
+
+    ######################################
+    # Get Functions!!!!!!!!!!!!!!!!!!!!!!!
+    ######################################
+
+    def get_user_id(self, username: str):
         user_collection = self.db["users"]
         try:
             user_fetch = user_collection.find_one(
-                {"user_name":username}, {"user_name":0, "password":0}
+                {"user_name": username}, {"user_name": 0, "password": 0}
             )
-            user_id = str(user_fetch['_id'])
+            user_id = str(user_fetch["_id"])
             return user_id
-            
+
         except Exception as e:
+            print("Get User Id Error!: ")
+            print(e)
+
+    def get_diarys_by_user_id(self, user_id: str):
+        diarys_collection = self.db["diarys"]
+        try:
+            fetch_diarys = diarys_collection.find({"user_id": user_id})
+            dict_diarys = list(fetch_diarys)
+            return dict_diarys
+        except Exception as e:
+            print("Get Diarys By user id Error!: ")
+            print(e)
+
+    def get_pages_by_diary_id(self, diary_id: str):
+        pages_collection = self.db["pages"]
+        try:
+            fetch_pages = pages_collection.find({"diary_id": diary_id})
+            dict_pages = list(fetch_pages)
+            return dict_pages
+        except Exception as e:
+            print("Get pages By diarys id Error!: ")
+            print(e)
+
+    ######################################
+    # Add Functions!!!!!!!!!!!!!!!!!!!!!!!
+    ######################################
+
+    def add_page(self, page: Page):
+        pages_collection = self.db["pages"]
+        try:
+            pages_collection.insert_one(page)
+        except Exception as e:
+            print("Add Page Document Error!: ")
+            print(e)
+
+    def add_diary(self, diary: Diary):
+        diary_collection = self.db["diarys"]
+        dict_diary = diary.model_dump()
+        try:
+            diary_collection.insert_one(dict_diary)
+        except Exception as e:
+            print("Add Diary Document Error!: ")
+            print(e)
+
+    def add_user(self, user: User):
+
+        user_collection = self.db["users"]
+        dict_user = user.model_dump()
+        try:
+            user_collection.insert_one(dict_user)
+
+        except Exception as e:
+            print("Add User Document Error!: ")
             print(e)
