@@ -139,5 +139,7 @@ class mongo:
         diarys_collection = self.db["diarys"]
         try:
             diarys_collection.delete_one({"_id": new_diary_id})
+            return True
         except Exception as e:
             print("delete Diary from db error!: ", e)
+            return False
