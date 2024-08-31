@@ -81,12 +81,17 @@ class mongo:
 
     def get_pages_by_diary_id(self, diary_id: str):
         pages_collection = self.db["pages"]
+        new_diary_id: ObjectId = ObjectId(diary_id)
         try:
-            fetch_pages = pages_collection.find({"diary_id": diary_id})
-            dict_pages = list(fetch_pages)
-            return dict_pages
+            pages: List[Page] = []
+            fetch_pages = pages_collection.find({"diary_id": new_diary_id})
+            for page in fetch_pages:
+                page["_id"] = str(page["_id"])
+                page["user_id"] = str(page["user_id"])
+                pages.append(page)
+            return pages
         except Exception as e:
-            print("Get pages By diarys id Error!: ")
+            print("Get Pages By Diary id Error!: ")
             print(e)
 
     ######################################
@@ -142,4 +147,13 @@ class mongo:
             return True
         except Exception as e:
             print("delete Diary from db error!: ", e)
+            return False
+    def delete_page(self, page_id:str):
+        new_page_id: ObjectId = ObjectId(page_id)
+        pages_collection = self.db["pages"]
+        try:
+            pages_collection.delete_one({"_id": new_page_id})
+            return True
+        except Exception as e:
+            print("delete Page from db error!: ", e)
             return False

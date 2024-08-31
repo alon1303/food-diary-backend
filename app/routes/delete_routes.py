@@ -22,3 +22,10 @@ def delete_diary(diary_id:str):
         return db.delete_diary(diary_id)
     except Exception as e:
         print("delete diary by id route error!: ", e)
+        
+@delete_router.delete('/pages/delete-page-by-id')
+def delete_page(page_id:str):
+    try:
+        return db.delete_page(page_id)
+    except Exception as e:
+        print("delete page by id route error!: ", e)
