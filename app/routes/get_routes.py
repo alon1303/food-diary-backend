@@ -31,7 +31,7 @@ def login(user_name:str, password:str):
 @get_router.get('/users/get-user-id')
 def get_user_id(username:str):
     try:
-        return db.get_user_id()
+        return db.get_user_id(username)
     except Exception as e:
         print(e)
 @get_router.get('/diarys/get-diarys-by-user-id')

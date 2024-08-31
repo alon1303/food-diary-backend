@@ -3,6 +3,7 @@ from pymongo.server_api import ServerApi
 from ..classes.classes import Diary, User, Page
 import re
 from bson import ObjectId
+from typing import List
 
 
 class mongo:
@@ -63,12 +64,17 @@ class mongo:
             print("Get User Id Error!: ")
             print(e)
 
-    def get_diarys_by_user_id(self, user_id: str):
+    def get_diarys_by_user_id(self, user_id: str) -> List[Diary]:
         diarys_collection = self.db["diarys"]
+        new_user_id: ObjectId = ObjectId(user_id)
         try:
-            fetch_diarys = diarys_collection.find({"user_id": user_id})
-            dict_diarys = list(fetch_diarys)
-            return dict_diarys
+            diarys: List[Diary] = []
+            fetch_diarys = diarys_collection.find({"user_id": new_user_id})
+            for fetch_diary in fetch_diarys:
+                fetch_diary["_id"] = str(fetch_diary["_id"])
+                fetch_diary["user_id"] = str(fetch_diary["user_id"])
+                diarys.append(fetch_diary)
+            return diarys
         except Exception as e:
             print("Get Diarys By user id Error!: ")
             print(e)
@@ -97,12 +103,15 @@ class mongo:
 
     def add_diary(self, diary: Diary):
         diary_collection = self.db["diarys"]
-        dict_diary = diary.model_dump()
         try:
+            diary.user_id = ObjectId(diary.user_id)
+            dict_diary = diary.model_dump()
             diary_collection.insert_one(dict_diary)
+            return True
         except Exception as e:
             print("Add Diary Document Error!: ")
             print(e)
+            return False
 
     def add_user(self, user: User):
 
@@ -114,3 +123,21 @@ class mongo:
         except Exception as e:
             print("Add User Document Error!: ")
             print(e)
+
+    ######################################
+    # Delete Functions!!!!!!!!!!!!!!!!!!!!
+    ######################################
+    def delete_diarys(self, user_id: str):
+        diarys_collection = self.db["diarys"]
+        try:
+            diarys_collection.delete_many({"user_id": "alon1303"})
+        except Exception as e:
+            print("delete Diarys from db error!: ", e)
+
+    def delete_diary(self, diary_id:str):
+        new_diary_id: ObjectId = ObjectId(diary_id)
+        diarys_collection = self.db["diarys"]
+        try:
+            diarys_collection.delete_one({"_id": new_diary_id})
+        except Exception as e:
+            print("delete Diary from db error!: ", e)

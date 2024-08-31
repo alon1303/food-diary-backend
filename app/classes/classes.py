@@ -11,6 +11,7 @@ class Page(BaseModel):
 
 
 class Diary(BaseModel):
+    _id: str | ObjectId
     name: str
     format: str
     user_id: str
@@ -18,5 +19,6 @@ class Diary(BaseModel):
 
 
 class User(BaseModel):
+    _id:str
     username: str
     password: str
